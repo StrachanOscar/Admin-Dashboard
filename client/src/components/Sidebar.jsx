@@ -33,7 +33,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
-import profileImage from '../assets';
+import profileImage from "../assets/profile.jpeg";
 
 const navItems = [
     {
@@ -138,7 +138,7 @@ const Sidebar = ({
                                     ECOMVISION
                                 </Typography>
                             </Box>
-                            {!isNonMovile && (
+                            {!isNonMobile && (
                                 <IconButton onClick={() => setIsSidebarOpen(!isSidebarOpen)}>
                                     <ChevronLeft />
                                  </IconButton>
@@ -146,7 +146,56 @@ const Sidebar = ({
                         </FlexBetween>
                     </Box>
                     <List>
+                        {navItems.map(({ text, icon }) => {
+                        if (!icon) {
+                        return (
+                            <Typography key={text} sx={{ m: "2.25rem 0 1rem 3rem" }}>
+                            {text}
+                            </Typography>
+                        );
+                        }
+                        const lcText = text.toLowerCase();
 
+                        return (
+                        // Depending on the text of the navigational item, we will navigate to that page.
+                        <ListItem key={text} disablePadding>
+                            <ListItemButton
+                            onClick={() => {
+                                navigate(`/${lcText}`);
+                                // Setting it as the active version.
+                                setActive(lcText);
+                            }}
+                            sx={{
+                                // If we are on the page of the navigation button, we change the colour.
+                                backgroundColor:
+                                active === lcText
+                                    ? theme.palette.secondary[300]
+                                    : "transparent",
+                                color:
+                                active === lcText
+                                    ? theme.palette.primary[600]
+                                    : theme.palette.secondary[100],
+                            }}
+                            >
+                            <ListItemIcon
+                                sx={{
+                                ml: "2rem",
+                                color:
+                                    active === lcText
+                                    ? theme.palette.primary[600]
+                                    : theme.palette.secondary[200],
+                                }}
+                            >
+                                {icon}
+                            </ListItemIcon>
+                            <ListItemText primary={text} />
+                            {active === lcText && (
+                                <ChevronRightOutlined sx={{ ml: "auto" }} />
+                            )}
+                            </ListItemButton>
+                        </ListItem>
+                        );
+                    })}
                     </List>
                 </Box>
             </Drawer>
