@@ -27,6 +27,7 @@ import {
     AdminPanelSettingsOutlined,
     TrendingUpOutlined,
     PieChartOutlined,
+    ChangeCircleSharp,
 } from "@mui/icons-material";
 
 import { useEffect, useState } from 'react';
@@ -34,9 +35,43 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import FlexBetween from './FlexBetween';
 import profileImage from '../assets';
 
-const Sidebar = () => {
+const Sidebar = ({
+    drawerWidth,
+    isSidebarOpen,
+    setIsSidebarOpen,
+    isNonMobile, 
+}) => {
+    const { pathname } = useLocation();
+    const [active, setActive] = useState("");
+    const navigate = useNavigate();
+    const theme = useTheme();
+
+    // Anytime the pathname changes, reset it to the active URL.
+    useEffect(() => {
+        setActive(pathname.substring(1));
+    }, [pathname]);
+
   return (
-    <div>Sidebar</div>
+    <Box component="nav">
+        {isSidebarOpen && (
+            <Drawer
+                open={isSidebarOpen}
+                onClose={() => setIsSidebarOpen(false)}
+                variant="persistent"
+                anchor="left"
+                sx={{
+                    width: drawerWidth,
+                    "& .MuiDrawer-paper": {
+                        color: theme.palette.secondary[200],
+                        backgroundColor: theme.palette.background.alt,
+                        boxSixing: "border-box",
+                        borderWidth: isNonMobile ? 0 : "2px",
+                        width: drawerWidth,
+                    }
+                }}
+            ></Drawer>
+        )}
+    </Box>
   )
 }
 
